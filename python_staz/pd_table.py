@@ -8,6 +8,7 @@ callset = allel.read_vcf("HG002_HiSeq_sorted_mapped_haplCall.g.vcf.gz")
 
 # table = allel.vcf_to_dataframe("HG002_HiSeq_sorted_mapped_haplCall.g.vcf.gz")
 
+# Tabulka variant
 table = allel.vcf_to_dataframe("HG002_HiSeq_sorted_mapped_haplCall.g.vcf.gz", fields=['CHROM','POS', 'ID', 'REF', 'ALT_1', 'ALT_2', 'ALT_3', 'QUAL','FILTER_PASS'])
 table.set_index('CHROM', inplace=True)
 
