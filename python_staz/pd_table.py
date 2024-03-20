@@ -57,12 +57,16 @@ final_tab_2['ident'] = [str(final_tab_2['CHROM'][i] + ":" + str(final_tab_2['POS
 ## final_table as True dataset
 true_pos_1 = sum(final_tab_true['ident'].isin(final_tab_1['ident']))/len(final_tab_true['ident']) * 100
 false_pos_1= sum(~final_tab_1['ident'].isin(final_tab_true['ident']))/len(final_tab_1['ident']) * 100
-false_neg_1 = sum(~final_tab_true['ident'].isin(final_tab_1['ident']))/len(final_tab_1['ident']) * 100
+false_neg_1 = sum(~final_tab_true['ident'].isin(final_tab_1['ident']))/len(final_tab_true['ident']) * 100
 
 true_pos_2 = sum(final_tab_true['ident'].isin(final_tab_2['ident']))/len(final_tab_true['ident']) * 100
 false_pos_2 = sum(~final_tab_2['ident'].isin(final_tab_true['ident']))/len(final_tab_2['ident']) * 100
-false_neg_2 = sum(~final_tab['ident'].isin(final_tab2['ident']))/len(final_tab2['ident']) * 100
+false_neg_2 = sum(~final_tab_true['ident'].isin(final_tab_2['ident']))/len(final_tab_true['ident']) * 100
 
 print(true_pos_1)
 print(false_pos_1)
 print(false_neg_1)
+
+print(true_pos_2)
+print(false_pos_2)
+print(false_neg_2)
