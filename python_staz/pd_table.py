@@ -1,6 +1,8 @@
 import allel
 import pandas as pd
 import argparse
+import matplotlib.pyplot as plt
+from matplotlib_venn import venn2
 
 # parse parametres
 parser = argparse.ArgumentParser(description='Tool to benchmark MGI and ilumina vcfs to GIB true dataset')
@@ -55,18 +57,73 @@ final_tab_2['ident'] = [str(final_tab_2['CHROM'][i] + ":" + str(final_tab_2['POS
 # identification of True/False positive and negative results
 
 ## final_table as True dataset
-true_pos_1 = sum(final_tab_true['ident'].isin(final_tab_1['ident']))/len(final_tab_true['ident']) * 100
-false_pos_1= sum(~final_tab_1['ident'].isin(final_tab_true['ident']))/len(final_tab_1['ident']) * 100
-false_neg_1 = sum(~final_tab_true['ident'].isin(final_tab_1['ident']))/len(final_tab_true['ident']) * 100
 
-true_pos_2 = sum(final_tab_true['ident'].isin(final_tab_2['ident']))/len(final_tab_true['ident']) * 100
-false_pos_2 = sum(~final_tab_2['ident'].isin(final_tab_true['ident']))/len(final_tab_2['ident']) * 100
-false_neg_2 = sum(~final_tab_true['ident'].isin(final_tab_2['ident']))/len(final_tab_true['ident']) * 100
+# total number of variants
+true_var = len(final_tab_true['ident'])
+mgi_var = len(final_tab_1['ident'])
+ilumina_var = len(final_tab_2['ident'])
 
-print(true_pos_1)
-print(false_pos_1)
-print(false_neg_1)
+# sum of true pos., false pos. and false neg. variants
+TP_sum_1 = sum(final_tab_true['ident'].isin(final_tab_1['ident']))
+FP_sum_1 = sum(~final_tab_1['ident'].isin(final_tab_true['ident']))
+FN_sum_1 = sum(~final_tab_true['ident'].isin(final_tab_1['ident']))
 
-print(true_pos_2)
-print(false_pos_2)
-print(false_neg_2)
+TP_sum_2 = sum(final_tab_true['ident'].isin(final_tab_2['ident']))
+FP_sum_2 = sum(~final_tab_2['ident'].isin(final_tab_true['ident']))
+FN_sum_2 = sum(~final_tab_true['ident'].isin(final_tab_2['ident']))
+
+# ratio of variants in true dataset
+
+true_pos_1 = TP_sum_1/true_var * 100
+false_pos_1= FP_sum_1/mgi_var * 100
+false_neg_1 = FN_sum_1/true_var * 100
+
+true_pos_2 = TP_sum_2/true_var * 100
+false_pos_2 = FP_sum_2/ilumina_var * 100
+false_neg_2 = FN_sum_2/true_var * 100
+
+#print(true_pos_1)
+#print(false_pos_1)
+#print(false_neg_1)
+
+#print(true_pos_2)
+#print(false_pos_2)
+#print(false_neg_2)
+
+# create pd DataFrame for MGI & Ilumina, containg number of True positive, False positive and False negative variants
+data_mgi = {
+    'Number of VAR': [TP_sum_1, FP_sum_1, FN_sum_1], 
+    'Total number of VAR': [true_var, mgi_var, true_var], 
+    'Ratio': [TP_sum_1/true_var, FP_sum_1/mgi_var , FN_sum_1/true_var], 
+    '%':[true_pos_1, false_pos_1, false_neg_1]
+}
+
+data_ilumina = {
+    'Number of VAR': [TP_sum_2, FP_sum_2, FN_sum_2],
+    'Total number of VAR': [true_var, ilumina_var, true_var],
+    'Ratio': [TP_sum_2/true_var, FP_sum_2/ilumina_var, FN_sum_2/true_var],
+    '%': [true_pos_2, false_pos_2, false_neg_2]
+}
+
+df_mgi = pd.DataFrame(data=data_mgi, index=['True positive', 'False positive', 'False negative'])
+df_ilumina = pd.DataFrame(data=data_ilumina, index=['True positive', 'False positive', 'False negative'])
+
+print(df_mgi)
+print(df_ilumina)
+
+# Create Venn diagram
+# Define the counts for the subsets
+true_and_mgi = TP_sum_1
+true_only = FN_sum_1
+mgi_only = FP_sum_1
+
+# Create the Venn diagram for MGI
+
+# Sizes of the sets and their intersection
+FP = false_pos_1         # mgi_only
+FN = false_neg_1        # true_only
+TP = true_pos_1         # true and mgi
+
+venn2(subsets=(FP, FN, TP), set_labels=('MGI Dataset', 'True Dataset'))
+#plt.title("Venn Diagram")
+plt.show()
