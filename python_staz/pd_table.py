@@ -1,8 +1,8 @@
 import allel
 import pandas as pd
 import argparse
-import matplotlib.pyplot as plt
 from matplotlib_venn import venn2
+import matplotlib.pyplot as plt
 
 # parse parametres
 parser = argparse.ArgumentParser(description='Tool to benchmark MGI and ilumina vcfs to GIB true dataset')
@@ -92,38 +92,42 @@ false_neg_2 = FN_sum_2/true_var * 100
 
 # create pd DataFrame for MGI & Ilumina, containg number of True positive, False positive and False negative variants
 data_mgi = {
-    'Number of VAR': [TP_sum_1, FP_sum_1, FN_sum_1], 
-    'Total number of VAR': [true_var, mgi_var, true_var], 
-    'Ratio': [TP_sum_1/true_var, FP_sum_1/mgi_var , FN_sum_1/true_var], 
+    'Number_of_VAR': [TP_sum_1, FP_sum_1, FN_sum_1],
+    'Total_number_of_VAR': [true_var, mgi_var, true_var],
+    'Ratio': [TP_sum_1/true_var, FP_sum_1/mgi_var , FN_sum_1/true_var],
     '%':[true_pos_1, false_pos_1, false_neg_1]
 }
 
 data_ilumina = {
-    'Number of VAR': [TP_sum_2, FP_sum_2, FN_sum_2],
-    'Total number of VAR': [true_var, ilumina_var, true_var],
+    'Number_of_VAR': [TP_sum_2, FP_sum_2, FN_sum_2],
+    'Total_number_of_VAR': [true_var, ilumina_var, true_var],
     'Ratio': [TP_sum_2/true_var, FP_sum_2/ilumina_var, FN_sum_2/true_var],
     '%': [true_pos_2, false_pos_2, false_neg_2]
 }
 
-df_mgi = pd.DataFrame(data=data_mgi, index=['True positive', 'False positive', 'False negative'])
-df_ilumina = pd.DataFrame(data=data_ilumina, index=['True positive', 'False positive', 'False negative'])
+df_mgi = pd.DataFrame(data=data_mgi, index=['True_positive', 'False_positive', 'False_negative'])
+df_ilumina = pd.DataFrame(data=data_ilumina, index=['True_positive', 'False_positive', 'False_negative'])
+df_mgi.to_csv('/home/user/project/results/df_tables/mgi_table', sep='\t', encoding='utf-8', index=True)
+df_ilumina.to_csv('/home/user/project/results/df_tables/ilumina_table', sep='\t', encoding='utf-8', index=True)
 
 print(df_mgi)
 print(df_ilumina)
 
 # Create Venn diagram
-# Define the counts for the subsets
-true_and_mgi = TP_sum_1
-true_only = FN_sum_1
-mgi_only = FP_sum_1
-
-# Create the Venn diagram for MGI
 
 # Sizes of the sets and their intersection
 FP = false_pos_1         # mgi_only
 FN = false_neg_1        # true_only
 TP = true_pos_1         # true and mgi
 
-venn2(subsets=(FP, FN, TP), set_labels=('MGI Dataset', 'True Dataset'))
-#plt.title("Venn Diagram")
+FP_2 = false_pos_2
+FN_2 = false_neg_2
+TP_2 = true_pos_2
+
+venn2(subsets=(FP, FN, TP), set_labels=('MGI', 'True'))
+plt.savefig('/home/user/project/results/venn_mgi.png')
+plt.show()
+
+venn2(subsets=(FP_2, FN_2, TP_2), set_labels=('Ilumina', 'True'))
+plt.savefig('/home/user/project/results/venn_ilumina.png')
 plt.show()
