@@ -1,5 +1,15 @@
 nextflow.enable.dsl=2
 
+
+process test {
+  container = "staphb/fastqc:latest" 
+
+  script:
+  """
+sleep infinity 
+  """
+}
+
 // Run FASTQC
 process fastqc {
 publishDir("${params.outdir}/fastqc", mode: 'copy')
@@ -209,11 +219,11 @@ workflow {
     //  Channels
 //ref_ch = Channel.fromPath(params.genome, checkIfExists: true)
 //ref2_ch = Channel.fromPath(params.ref_genome, checkIfExists: true)
-reads_ch = Channel.fromFilePairs(params.reads, checkIfExists: true)//.view()
-true_vcf_ch = Channel.fromPath(params.true_vcf, checkIfExists: true)//.view()
-
+// reads_ch = Channel.fromFilePairs(params.reads, checkIfExists: true)//.view()
+// true_vcf_ch = Channel.fromPath(params.true_vcf, checkIfExists: true)//.view()
+test()
 //reads_ch.view()
-    fastqc(reads_ch)
+    // fastqc(reads_ch)
 //     sam_ch = bwa(reads_ch)
 // //sam_ch.view()
 //     bam_ch = sam_to_bam(sam_ch)
