@@ -10,9 +10,11 @@ publishDir("${params.outdir}/fastqc", mode: 'copy')
   output:
   path "fastqc_${sample_id}/*"
 
+  container = "staphb/fastqc:latest" 
+
   script:
   """
-
+sleep infinity 
   mkdir fastqc_${sample_id}
   fastqc -o fastqc_${sample_id}  ${reads}
   """
@@ -212,28 +214,26 @@ true_vcf_ch = Channel.fromPath(params.true_vcf, checkIfExists: true)//.view()
 
 //reads_ch.view()
     fastqc(reads_ch)
-    sam_ch = bwa(reads_ch)
-//sam_ch.view()
-    bam_ch = sam_to_bam(sam_ch)
-    sort_ch = sort_bam(bam_ch)
-    mapp_reads = extract_mapped_reads(sort_ch)
-    indexed_ch = index_bam(mapp_reads)//.view()
-    //indexed_ch.view()
-    BaiBam_ch = indexed_ch.join(mapp_reads)//.view() //zpusob 2
-    //mark_duplicates(BaiBam_ch).view()
-    mark_ch = mark_duplicates(BaiBam_ch)//.view()
-    mark_bam_ch = mark_ch.map{it -> [it[0], it[1]]}//.view()
-    base_ch = base_recal(mark_bam_ch)
-    MD_base_ch = base_ch.join(mark_bam_ch)//.view()
-    //apply_bqsr(MD_base_ch)//.view()
-    recal_ch = apply_bqsr(MD_base_ch)
-    //hapl_caller(recal_ch)//.view()
-    //mark_ch.map{it -> [it[0][0..5], it[1]]}.view()
-    hapl_ch = hapl_caller(recal_ch)
-    hapl_caller_ch = hapl_ch.map{it -> [it[0][0..5], it[1]]}.groupTuple()//.view()
-
-    call_ch = hapl_caller_ch.combine(true_vcf_ch).map{it -> [it[0], it[1][0], it[1][1], it[2]]}.view()
-
-    benchmark(call_ch)
+//     sam_ch = bwa(reads_ch)
+// //sam_ch.view()
+//     bam_ch = sam_to_bam(sam_ch)
+//     sort_ch = sort_bam(bam_ch)
+//     mapp_reads = extract_mapped_reads(sort_ch)
+//     indexed_ch = index_bam(mapp_reads)//.view()
+//     //indexed_ch.view()
+//     BaiBam_ch = indexed_ch.join(mapp_reads)//.view() //zpusob 2
+//     //mark_duplicates(BaiBam_ch).view()
+//     mark_ch = mark_duplicates(BaiBam_ch)//.view()
+//     mark_bam_ch = mark_ch.map{it -> [it[0], it[1]]}//.view()
+//     base_ch = base_recal(mark_bam_ch)
+//     MD_base_ch = base_ch.join(mark_bam_ch)//.view()
+//     //apply_bqsr(MD_base_ch)//.view()
+//     recal_ch = apply_bqsr(MD_base_ch)
+//     //hapl_caller(recal_ch)//.view()
+//     //mark_ch.map{it -> [it[0][0..5], it[1]]}.view()
+//     hapl_ch = hapl_caller(recal_ch)
+//     hapl_caller_ch = hapl_ch.map{it -> [it[0][0..5], it[1]]}.groupTuple()//.view()
+//     call_ch = hapl_caller_ch.combine(true_vcf_ch).map{it -> [it[0], it[1][0], it[1][1], it[2]]}.view()
+//     benchmark(call_ch)
 }
     

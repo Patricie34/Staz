@@ -4,6 +4,7 @@ import argparse
 from matplotlib_venn import venn2
 import matplotlib.pyplot as plt
 
+
 # parse parametres
 parser = argparse.ArgumentParser(description='Tool to benchmark MGI and ilumina vcfs to GIB true dataset')
 
@@ -15,6 +16,7 @@ args = parser.parse_args()
 true=args.true
 mgi=args.mgi
 ilumina=args.ilumina
+
 
 # load vcf but missing GT and ALT
 print("load vcfs")
@@ -107,8 +109,10 @@ data_ilumina = {
 
 df_mgi = pd.DataFrame(data=data_mgi, index=['True_positive', 'False_positive', 'False_negative'])
 df_ilumina = pd.DataFrame(data=data_ilumina, index=['True_positive', 'False_positive', 'False_negative'])
-df_mgi.to_csv('/home/user/project/results/df_tables/mgi_table', sep='\t', encoding='utf-8', index=True)
-df_ilumina.to_csv('/home/user/project/results/df_tables/ilumina_table', sep='\t', encoding='utf-8', index=True)
+df_mgi.to_csv('./mgi_table', sep='\t', encoding='utf-8', index=True)
+df_ilumina.to_csv('./ilumina_table', sep='\t', encoding='utf-8', index=True)
+# df_mgi.to_csv('/home/user/project/results/df_tables/mgi_table', sep='\t', encoding='utf-8', index=True)
+# df_ilumina.to_csv('/home/user/project/results/df_tables/ilumina_table', sep='\t', encoding='utf-8', index=True)
 
 print(df_mgi)
 print(df_ilumina)
@@ -125,9 +129,9 @@ FN_2 = false_neg_2
 TP_2 = true_pos_2
 
 venn2(subsets=(FP, FN, TP), set_labels=('MGI', 'True'))
-plt.savefig('/home/user/project/results/venn_mgi.png')
+plt.savefig('./mgi.png')
 plt.show()
 
 venn2(subsets=(FP_2, FN_2, TP_2), set_labels=('Ilumina', 'True'))
-plt.savefig('/home/user/project/results/venn_ilumina.png')
+plt.savefig('./ilumina.png')
 plt.show()
