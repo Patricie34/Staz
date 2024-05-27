@@ -1,6 +1,6 @@
 # First dockerfile
 
-FROM python:3.8-slim
+FROM ubuntu:20.04
 
 # Set the working directory in the container
 WORKDIR /app
