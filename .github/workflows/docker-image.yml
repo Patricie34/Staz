@@ -15,10 +15,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile --tag pytools:$(date +%s)
 
     - name: Login to Docker Hub
-      run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.USER_NAME }}" --password-stdin
       
     - name: Push Docker image to Docker Hub
-      run: docker push "${{ secrets.DOCKERHUB_USERNAME }}/repository_name:latest"
+      run: docker push "${{ secrets.USER_NAME }}/py_container:latest"
