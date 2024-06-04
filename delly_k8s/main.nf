@@ -2,7 +2,6 @@ nextflow.enable.dsl=2
 
 process bcftools{
 
-    publishDir("${params.outdir}/${sample_id}/bcftools", mode: 'copy')
     memory '20 MB'
 
     input:
@@ -23,8 +22,8 @@ process bcftools{
 }
 
 process alfred{
-    publishDir("${params.outdir}/${sample_id}/alfred", mode: 'copy')
-    memory '60 MB'
+    publishDir("/storage/01.NanoBreak/data/samples/${sample_id}/delly_hg38/", mode: 'copy')
+    memory '70 MB'
 
     input:
     tuple val(sample_id), path("${sample_id}.sv.tsv"), path("${sample_id}.input.tsv")
