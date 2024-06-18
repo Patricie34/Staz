@@ -21,6 +21,7 @@ process bcftools{
     """
 }
 
+
 process alfred{
     publishDir("/storage/01.NanoBreak/data/samples/${sample_id}/delly_hg38/", mode: 'copy')
     memory '70 MB'
