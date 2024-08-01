@@ -15,10 +15,5 @@ RUN R -e "install.packages(c('ggplot2', 'scales', 'gtable', 'grid'), repos='http
 RUN R -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('DNAcopy')"
 
 # Set the working directory
-WORKDIR /usr/local/src/myscripts
+WORKDIR /app
 
-# Copy your script to the Docker image (replace your_script.R with your actual script name)
-COPY your_script.R .
-
-# Default command to run your script (replace your_script.R with your actual script name)
-CMD ["Rscript", "your_script.R"]
