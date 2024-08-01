@@ -1,33 +1,23 @@
-# Use the official Ubuntu image as the base
-FROM ubuntu:20.04
+# Use the rocker/r-ver base image for R version 4.4.0
+FROM rocker/r-ver:4.4.0
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install system dependencies for the packages
+RUN apt-get update && \
+    apt-get install -y \
     libcurl4-openssl-dev \
-    libxml2-dev \
     libssl-dev \
-    libxt-dev \
-    liblzma-dev \
-    zlib1g-dev \
-    libgmp-dev \
-    libgit2-dev \
-    gfortran \
-    software-properties-common \
+    libxml2-dev \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Add CRAN repository and install R base version 4.4.0
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 \
-    && add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/' \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends r-base=4.4.0-1.2004.0 \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install R packages from CRAN
+# Install the required CRAN packages
 RUN R -e "install.packages(c('ggplot2', 'scales', 'gtable', 'grid'), repos='http://cran.rstudio.com/')"
 
-# Install Bioconductor and DNAcopy package
-RUN R -e "install.packages('BiocManager', repos='http://cran.rstudio.com/')" \
-    && R -e "BiocManager::install('DNAcopy', update = TRUE, ask = FALSE)"
+# Install Bioconductor packages
+RUN R -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); \
+           BiocManager::install(version = '3.19'); \
+           BiocManager::install('DNAcopy')"
 
-# Set the working directory (optional)
-WORKDIR /app
+# Set the working directory
+WORKDIR /home/rstudio
+
