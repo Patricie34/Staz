@@ -12,6 +12,6 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up a working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 
