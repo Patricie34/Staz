@@ -1,4 +1,4 @@
-name: Build and Publish R Docker image with DNAcopy
+name: Build and Publish Docker image with python
 
 on:
   push:
