@@ -1,4 +1,4 @@
-# Use an official Rocker image for R
+# Stage 1: Build the required dependencies and alleleCount
 FROM rocker/tidyverse:4.2.3 as builder
 
 # Install system dependencies for ASCAT, Bioconductor, and alleleCount compilation
@@ -15,9 +15,12 @@ RUN apt-get update && apt-get install -y \
     libboost-dev \
     libboost-iostreams-dev \
     libboost-filesystem-dev \
+    libgsl-dev \
+    libbz2-dev \
+    liblzma-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Bioconductor packages (GenomicRanges & IRanges)
+# Install Bioconductor packages (GenomicRanges, IRanges, DNAcopy)
 RUN R -e "install.packages('BiocManager')" && \
     R -e "BiocManager::install(c('GenomicRanges', 'IRanges', 'DNAcopy'))"
 
@@ -29,19 +32,13 @@ RUN R -e "install.packages('devtools')" && \
 RUN git clone https://github.com/cancerit/alleleCount.git /alleleCount
 WORKDIR /alleleCount
 
-# Ensure all necessary build dependencies are installed before compiling
-RUN apt-get update && apt-get install -y \
-    libgsl-dev \
-    libbz2-dev \
-    liblzma-dev
-
-# Try building the alleleCount tool
+# Build the alleleCount tool
 RUN make
 
-# Copy the compiled alleleCount to the final image
+# Stage 2: Create the runtime environment
 FROM ubuntu:20.04
 
-# Install required dependencies for alleleCount and ASCAT
+# Install required runtime dependencies for alleleCount and ASCAT
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
     locales \
@@ -67,7 +64,7 @@ ENV LD_LIBRARY_PATH=$OPT/lib
 ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 
-# Copy the compiled alleleCount from the builder stage
+# Copy the compiled alleleCount and dependencies from the builder stage
 COPY --from=builder /alleleCount /opt/wtsi-cgp
 
 # Set the working directory in the container
