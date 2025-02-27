@@ -1,4 +1,4 @@
-# Use an official Rocker image for R
+ # Use an official Rocker image for R
 FROM rocker/tidyverse:4.2.3
 
 # Install system dependencies for ASCAT and Bioconductor
@@ -21,7 +21,7 @@ RUN R -e "install.packages('devtools')" && \
     R -e "devtools::install_github('VanLoo-lab/ascat/ASCAT')"
 
 # COPY alleleCounter from its official container
-COPY --from=quay.io/wtsicgp/allelecount:latest /opt/wtsi-cgp /opt/wtsi-cgp
+COPY --from=quay.io/biocontainers/cancerit-allelecount:latest /opt/wtsi-cgp /opt/wtsi-cgp
 
 # Set environment variables for alleleCounter
 ENV PATH="/opt/wtsi-cgp/bin:$PATH"
