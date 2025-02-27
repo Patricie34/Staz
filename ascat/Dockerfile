@@ -1,7 +1,7 @@
- # Use an official Rocker image for R
-FROM rocker/tidyverse:4.2.3
+# Use an official Rocker image for R
+FROM rocker/tidyverse:4.2.3 as builder
 
-# Install system dependencies for ASCAT and Bioconductor
+# Install system dependencies for ASCAT, Bioconductor, and alleleCount compilation
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libssl-dev \
@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
     libgit2-dev \
     python3 \
     python3-pip \
+    build-essential \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Bioconductor packages (GenomicRanges & IRanges)
@@ -20,11 +22,42 @@ RUN R -e "install.packages('BiocManager')" && \
 RUN R -e "install.packages('devtools')" && \
     R -e "devtools::install_github('VanLoo-lab/ascat/ASCAT')"
 
-# COPY alleleCounter from its official container
-COPY --from=quay.io/biocontainers/cancerit-allelecount /opt/wtsi-cgp /opt/wtsi-cgp
+# Clone the alleleCount repository and build it
+RUN git clone https://github.com/cancerit/alleleCount.git /alleleCount
+WORKDIR /alleleCount
+RUN make
 
-# Set environment variables for alleleCounter
-ENV PATH="/opt/wtsi-cgp/bin:$PATH"
+# Copy the compiled alleleCount to the final image
+FROM ubuntu:20.04
+
+# Install required dependencies for alleleCount and ASCAT
+RUN apt-get update && apt-get install -y \
+    apt-transport-https \
+    locales \
+    curl \
+    ca-certificates \
+    libperlio-gzip-perl \
+    bzip2 \
+    psmisc \
+    time \
+    zlib1g \
+    liblzma5 \
+    libncurses5 \
+    p11-kit \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set environment variables for ASCAT and alleleCount
+ENV OPT /opt/wtsi-cgp
+ENV PATH=$OPT/bin:$OPT/biobambam2/bin:$PATH
+ENV PERL5LIB=$OPT/lib/perl5
+ENV LD_LIBRARY_PATH=$OPT/lib
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+
+# Copy the compiled alleleCount from the builder stage
+COPY --from=builder /alleleCount /opt/wtsi-cgp
 
 # Set the working directory in the container
 WORKDIR /app
