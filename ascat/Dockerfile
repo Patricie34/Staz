@@ -20,5 +20,11 @@ RUN R -e "install.packages('BiocManager')" && \
 RUN R -e "install.packages('devtools')" && \
     R -e "devtools::install_github('VanLoo-lab/ascat/ASCAT')"
 
+# COPY alleleCounter from its official container
+COPY --from=quay.io/wtsicgp/allelecount:latest /opt/wtsi-cgp /opt/wtsi-cgp
+
+# Set environment variables for alleleCounter
+ENV PATH="/opt/wtsi-cgp/bin:$PATH"
+
 # Set the working directory in the container
 WORKDIR /app
