@@ -1,13 +1,14 @@
-# Use a lightweight Linux distribution as base image
-FROM rocker/r-base:4.1.3
+# Use rocker/tidyverse as the base image
+FROM rocker/tidyverse:4.2.3
 
 # Set environment variables to avoid interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C.UTF-8 \
     LANG=C.UTF-8
 
-# Install system dependencies
+# Update and install system dependencies
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
         build-essential \
         libcurl4-gnutls-dev \
@@ -38,9 +39,3 @@ ENV ALLELECOUNTPATH=/alleleCount
 
 # Optionally, you can add your working directory here
 WORKDIR /app
-
-# Copy any additional scripts or data needed for your analysis
-# COPY . .
-
-# Set the default command to start an R session (or run a script)
-CMD ["R"]
