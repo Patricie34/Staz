@@ -12,11 +12,14 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     build-essential \
     git \
+    libboost-dev \
+    libboost-iostreams-dev \
+    libboost-filesystem-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Bioconductor packages (GenomicRanges & IRanges)
 RUN R -e "install.packages('BiocManager')" && \
-    R -e "BiocManager::install(c('GenomicRanges', 'IRanges'))"
+    R -e "BiocManager::install(c('GenomicRanges', 'IRanges', 'DNAcopy'))"
 
 # Install devtools to install ASCAT from GitHub
 RUN R -e "install.packages('devtools')" && \
@@ -25,6 +28,14 @@ RUN R -e "install.packages('devtools')" && \
 # Clone the alleleCount repository and build it
 RUN git clone https://github.com/cancerit/alleleCount.git /alleleCount
 WORKDIR /alleleCount
+
+# Ensure all necessary build dependencies are installed before compiling
+RUN apt-get update && apt-get install -y \
+    libgsl-dev \
+    libbz2-dev \
+    liblzma-dev
+
+# Try building the alleleCount tool
 RUN make
 
 # Copy the compiled alleleCount to the final image
