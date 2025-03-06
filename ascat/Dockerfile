@@ -1,47 +1,46 @@
-# Use rocker/tidyverse as the base image
-FROM rocker/tidyverse:4.2.3
+# 1️⃣ Stage 1: Compile alleleCounter
+FROM ubuntu:20.04 AS builder
 
-# Set environment variables to avoid interactive prompts during package installation
-ENV DEBIAN_FRONTEND=noninteractive \
-    LC_ALL=C.UTF-8 \
-    LANG=C.UTF-8
-
-# Update and install system dependencies
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        libcurl4-gnutls-dev \
-        libxml2-dev \
-        libssl-dev \
-        wget \
-        git \
-        vim \
-        g++ \
-        make \
-        autoconf \
-        automake \
-        libtool \
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Bioconductor packages (GenomicRanges, IRanges, DNAcopy)
+# Clone and compile alleleCounter
+WORKDIR /opt
+RUN git clone --recursive https://github.com/cancerit/alleleCount.git && \
+    cd alleleCount && \
+    make
+
+# 2️⃣ Stage 2: Final Image with ASCAT + alleleCounter
+FROM rocker/tidyverse:4.2.3
+
+# Install additional system dependencies for ASCAT
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev \
+    gfortran \
+    libgit2-dev \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Bioconductor packages (GenomicRanges & IRanges)
 RUN R -e "install.packages('BiocManager')" && \
-    R -e "BiocManager::install(c('GenomicRanges', 'IRanges', 'DNAcopy'))"
+    R -e "BiocManager::install(c('GenomicRanges', 'IRanges'))"
 
 # Install devtools to install ASCAT from GitHub
 RUN R -e "install.packages('devtools')" && \
     R -e "devtools::install_github('VanLoo-lab/ascat/ASCAT')"
 
-# Clone the alleleCount repository from the 'dev' branch and build it
-RUN git clone --branch dev https://github.com/cancerit/alleleCount.git /alleleCount && \
-    cd /alleleCount/build && \
-    ./build.sh
+# Copy compiled alleleCounter binary from builder
+COPY --from=builder /opt/alleleCount/alleleCounter /usr/local/bin/
 
-# Set environment variables for alleleCount (if needed)
-ENV ALLELECOUNTPATH=/alleleCount/c
+# Verify installation
+RUN which alleleCounter && alleleCounter --version
 
-# Optionally, you can add your working directory here
+# Set working directory
 WORKDIR /app
-
-# Set the default command to start an R session (or run a script)
-CMD ["R"]
