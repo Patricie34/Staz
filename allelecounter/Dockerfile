@@ -1,7 +1,6 @@
-# Use the Micromamba base image
-FROM mambaorg/micromamba:latest
+FROM mambaorg/micromamba:1.5.4-debian-bullseye
 
-# Install required system utilities (including 'ps' for Nextflow)
+# Install system utilities (procps includes 'ps' for Nextflow)
 RUN apt-get update && apt-get install -y procps
 
 # Set up your Micromamba environment
