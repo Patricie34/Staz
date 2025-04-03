@@ -5,12 +5,12 @@ FROM mambaorg/micromamba:latest
 RUN apt-get update && apt-get install -y procps
 
 # Set up your Micromamba environment
-COPY environment.yml /tmp/environment.yml
-RUN micromamba create -y -n myenv -f /tmp/environment.yml
+COPY conda.yml /tmp/conda.yml
+RUN micromamba create -y -n allelecounter-env -f /tmp/conda.yml
 
 # Activate the environment when running the container
-ENV MAMBA_DEFAULT_ENV=myenv
-ENV PATH=/opt/conda/envs/myenv/bin:$PATH
+ENV MAMBA_DEFAULT_ENV=allelecounter-env
+ENV PATH=/opt/conda/envs/allelecounter-env/bin:$PATH
 
 # Set the working directory
 WORKDIR /app
