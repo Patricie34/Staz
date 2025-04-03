@@ -1,18 +1,25 @@
-FROM mambaorg/micromamba:1.5.4-debian-bullseye
+FROM debian:latest
 
-# Install system utilities (procps includes 'ps' for Nextflow)
-RUN apt-get update && apt-get install -y procps
+# Install system utilities and dependencies
+RUN apt-get update && apt-get install -y \
+    curl ca-certificates bzip2 procps && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set up your Micromamba environment
+# Install Micromamba
+RUN curl -L https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C /usr/local
+
+# Set up environment variables
+ENV PATH=/usr/local/bin/micromamba/bin:$PATH
+ENV MAMBA_ROOT_PREFIX=/opt/micromamba
+
+# Create and activate a Micromamba environment
 COPY conda.yml /tmp/conda.yml
-RUN micromamba create -y -n allelecounter-env -f /tmp/conda.yml
+RUN micromamba create -y -n allelecount_env -f /tmp/conda.yml
 
-# Activate the environment when running the container
-ENV MAMBA_DEFAULT_ENV=allelecounter-env
-ENV PATH=/opt/conda/envs/allelecounter-env/bin:$PATH
+# Activate the environment
+ENV PATH=/opt/micromamba/envs/allelecount_env/bin:$PATH
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Define the entrypoint (optional)
 CMD ["/bin/bash"]
