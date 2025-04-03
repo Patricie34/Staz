@@ -1,0 +1,7 @@
+name: allelecounter-env
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - allelecounter=4.2.1
+  - mamba
