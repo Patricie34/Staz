@@ -13,9 +13,6 @@ RUN micromamba create -f /tmp/conda.yml -y && micromamba clean --all --yes
 # Set the environment path to the created environment
 ENV PATH="/opt/conda/envs/allelecount_env/bin:$PATH"
 
-# Verify installation
-RUN alleleCounter --version
-
 # Set the default working directory for the container
 WORKDIR /app
 
