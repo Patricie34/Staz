@@ -26,5 +26,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./allelecounter
+        file: ./allelecounter/Dockerfile
         push: true
         tags: ${{ secrets.USER_NAME }}/allelecounter-image:latest
