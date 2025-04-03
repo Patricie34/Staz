@@ -1,31 +1,31 @@
-name: Build and Publish Docker image with Mamba env and allelcounter
+name: Build and Publish Docker Image with Mamba Env and AlleleCounter
 
 on:
   push:
     branches:
-      - main  # You can change this to the branch you want to trigger the workflow
+      - main  # Adjust this if you want to trigger on a different branch
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4  # Updated to the latest stable version
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2  # Updated to v2 for improvements
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.USER_NAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2  # Updated to v2 for better security
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: ./allelecounter
-        file: ./allelecounter/Dockerfile
-        push: true
-        tags: ${{ secrets.USER_NAME }}/allelecounter-image:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5  # Updated to v5 for stability and features
+        with:
+          context: ./allelecounter
+          file: ./allelecounter/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/allelecounter-image:latest
