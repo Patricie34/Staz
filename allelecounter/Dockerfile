@@ -1,23 +1,23 @@
 # Use a base image with Mamba
 FROM mambaorg/micromamba:latest
 
-# Set working directory for environment creation
+# Set working directory
 WORKDIR /opt/env
 
-# Define the conda environment file in the Dockerfile
+# Copy conda.yml into the container
 COPY conda.yml /tmp/conda.yml
 
 # Use Mamba to create the environment
 RUN micromamba create -f /tmp/conda.yml -y && micromamba clean --all --yes
 
-# Activate the environment and set the path
+# Set the environment path to the created environment
 ENV PATH="/opt/conda/envs/allelecount_env/bin:$PATH"
 
-# Verify the installation of alleleCounter
+# Verify installation
 RUN alleleCounter --version
 
 # Set the default working directory for the container
 WORKDIR /app
 
-# Set the default command for the container to launch a shell
+# Set the default command for the container
 CMD ["/bin/bash"]
