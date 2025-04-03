@@ -1,20 +1,19 @@
-# Use a base image with Mamba
+# Use the Micromamba base image
 FROM mambaorg/micromamba:latest
 
-# Set working directory
-WORKDIR /opt/env
+# Install required system utilities (including 'ps' for Nextflow)
+RUN apt-get update && apt-get install -y procps
 
-# Copy conda.yml into the container
-COPY conda.yml /tmp/conda.yml
+# Set up your Micromamba environment
+COPY environment.yml /tmp/environment.yml
+RUN micromamba create -y -n myenv -f /tmp/environment.yml
 
-# Use Mamba to create the environment
-RUN micromamba create -f /tmp/conda.yml -y && micromamba clean --all --yes
+# Activate the environment when running the container
+ENV MAMBA_DEFAULT_ENV=myenv
+ENV PATH=/opt/conda/envs/myenv/bin:$PATH
 
-# Set the environment path to the created environment
-ENV PATH="/opt/conda/envs/allelecount_env/bin:$PATH"
-
-# Set the default working directory for the container
+# Set the working directory
 WORKDIR /app
 
-# Set the default command for the container
+# Define the entrypoint (optional)
 CMD ["/bin/bash"]
