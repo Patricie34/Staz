@@ -1,27 +1,21 @@
-FROM debian:latest
+# Use an official Miniconda image as the base
+FROM continuumio/miniconda3:latest
 
-# Install system utilities and dependencies
-RUN apt-get update && apt-get install -y \
-    curl ca-certificates bzip2 procps bash tar && \
-    rm -rf /var/lib/apt/lists/*
+# Set maintainer label
+LABEL maintainer="your-email@example.com"
 
-# Install Micromamba
-RUN curl -L https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C /usr/local
+# Set environment variables
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-# Environment variables
-ENV MAMBA_ROOT_PREFIX=/opt/micromamba
-ENV PATH=/opt/micromamba/envs/allelecount_env/bin:/usr/local/bin/micromamba/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# Install cancerit-allelecount and any other necessary tools
+RUN conda install -c bioconda -c conda-forge -y cancerit-allelecount && \
+    conda clean -afy && \
+    find /opt/conda/ -follow -type f -name '*.a' -delete && \
+    find /opt/conda/ -follow -type f -name '*.pyc' -delete && \
+    find /opt/conda/ -follow -type f -name '*.js.map' -delete
 
-# Copy environment definition
-COPY conda.yml /tmp/conda.yml
-
-# Create micromamba environment
-RUN micromamba create -y -n allelecount_env -f /tmp/conda.yml && \
-    micromamba clean --all --yes
-
-# Set working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Make sure entrypoint doesn't override bash
-ENTRYPOINT []
+# Command to run when the container starts
 CMD ["/bin/bash"]
