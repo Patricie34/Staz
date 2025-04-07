@@ -4,5 +4,5 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - cancerit-allelecount=4.2.1
+  - cancerit-allelecount
   - mamba
