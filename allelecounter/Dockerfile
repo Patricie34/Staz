@@ -4,8 +4,8 @@ FROM continuumio/miniconda3:latest
 # Set the working directory
 WORKDIR /app
 
-# Install dependencies from conda YAML conda
-COPY conda.yaml /app/conda.yml
+# Install dependencies from conda YML conda
+COPY conda.yml /app/conda.yml
 
 # Install the conda via conda
 RUN conda env create -f conda.yml
