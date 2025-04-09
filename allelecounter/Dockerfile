@@ -1,20 +1,17 @@
-FROM continuumio/miniconda3
+# Use a base image with Miniconda3
+FROM continuumio/miniconda3:latest
 
-# Set environment variables
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-
-# Install cancerit-allelecount and its dependencies using conda
-RUN conda install -c bioconda -c conda-forge -y \
-    cancerit-allelecount \
-    htslib \
-    procps \
-    && conda clean -afy \
-    && find /opt/conda/ -follow -type f -name '*.a' -delete \
-    && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
-    && find /opt/conda/ -follow -type f -name '*.js.map' -delete
-
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Command to run when the container starts
-CMD ["/bin/bash"]
+# Install dependencies from conda YAML conda
+COPY conda.yaml /app/conda.yaml
+
+# Install the conda via conda
+RUN conda env create -f conda.yaml
+
+# Set the default conda to activate
+SHELL ["conda", "run", "-n", "base", "/bin/bash", "-c"]
+
+# Set the default command for the container
+CMD ["bash"]
