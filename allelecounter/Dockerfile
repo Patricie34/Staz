@@ -1,7 +1,7 @@
-# Use a base image with Miniconda3
+# Use base image with Miniconda
 FROM continuumio/miniconda3:latest
 
-# Install system dependencies needed for R packages and devtools
+# Install system packages needed for devtools and R compilation
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libssl-dev \
@@ -14,20 +14,17 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
-# Copy the conda environment file
+# Copy Conda environment file
 COPY ascat_env.yml /app/ascat_env.yml
 
-# Create the environment
+# Create Conda environment
 RUN conda env create -f /app/ascat_env.yml --prefix /opt/conda/envs/ascat_env
 
-# Add the conda env to PATH (so Nextflow finds Rscript)
-ENV PATH="/opt/conda/envs/ascat_env/bin:$PATH"
-
-# Set the environment to use in following RUN commands
-SHELL ["conda", "run", "-n", "ascat_env", "/bin/bash", "-c"]
+# Activate Conda env in shell by setting PATH
+ENV PATH="/opt/conda/envs/ascat_env/bin:/opt/conda/bin:$PATH"
 
 # Install ASCAT from GitHub using Rscript from the environment
 RUN /opt/conda/envs/ascat_env/bin/Rscript -e "devtools::install_github('VanLoo-lab/ascat/ASCAT')"
 
-# Default command
+# Set default command
 CMD ["bash"]
