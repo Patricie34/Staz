@@ -20,8 +20,13 @@ COPY ascat_env.yml /app/ascat_env.yml
 # Create Conda environment
 RUN conda env create -f /app/ascat_env.yml --prefix /opt/conda/envs/ascat_env
 
-# Activate Conda env in shell by setting PATH
-ENV PATH="/opt/conda/envs/ascat_env/bin:/opt/conda/bin:$PATH"
+# Initialize Conda for bash shell
+RUN /opt/conda/bin/conda init bash
+
+# Set the environment variables to ensure Conda and R are available
+ENV PATH="/opt/conda/envs/ascat_env/bin:$PATH"
+ENV CONDA_PREFIX="/opt/conda/envs/ascat_env"
+ENV CONDA_DEFAULT_ENV="ascat_env"
 
 # Install ASCAT from GitHub using Rscript from the environment
 RUN /opt/conda/envs/ascat_env/bin/Rscript -e "devtools::install_github('VanLoo-lab/ascat/ASCAT')"
