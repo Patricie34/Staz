@@ -1,0 +1,15 @@
+name: ascat_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-base=4.2.2
+  - bioconductor-biocgenerics=0.44.0
+  - bioconductor-iranges
+  - bioconductor-genomicranges
+  - cancerit-allelecount=4.3.0
+  - htslib=1.17
+  - cairo=1.16.0
+  - r-r.devices
+  - r-devtools
