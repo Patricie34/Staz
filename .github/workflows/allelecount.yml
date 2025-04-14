@@ -28,6 +28,5 @@ jobs:
           context: ./allelecounter
           file: ./allelecounter/Dockerfile
           push: true
-          tags: ${{ secrets.USER_NAME }}/allelecounter-image:latest
-                ${{ secrets.USER_NAME }}/allelecounter-image:v1.0.0
+          tags: ${{ secrets.USER_NAME }}/allelecounter-image:v1.0.0
           no-cache: true
