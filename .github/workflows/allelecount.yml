@@ -29,3 +29,4 @@ jobs:
           file: ./allelecounter/Dockerfile
           push: true
           tags: ${{ secrets.USER_NAME }}/allelecounter-image:latest
+          no-cache: true
