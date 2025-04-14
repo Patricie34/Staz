@@ -20,11 +20,14 @@ COPY ascat_env.yml /app/ascat_env.yml
 # Create the environment
 RUN conda env create -f /app/ascat_env.yml --prefix /opt/conda/envs/ascat_env
 
+# Add the conda env to PATH (so Nextflow finds Rscript)
+ENV PATH="/opt/conda/envs/ascat_env/bin:$PATH"
+
 # Set the environment to use in following RUN commands
 SHELL ["conda", "run", "-n", "ascat_env", "/bin/bash", "-c"]
 
-# Install ASCAT from GitHub (R package)
-RUN Rscript -e "devtools::install_github('VanLoo-lab/ascat/ASCAT')"
+# Install ASCAT from GitHub using Rscript from the environment
+RUN /opt/conda/envs/ascat_env/bin/Rscript -e "devtools::install_github('VanLoo-lab/ascat/ASCAT')"
 
 # Default command
 CMD ["bash"]
