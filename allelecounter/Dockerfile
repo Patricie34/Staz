@@ -1,6 +1,9 @@
 # Use a base image with Miniconda3
 FROM continuumio/miniconda3:latest
 
+# Install procps to get the 'ps' command
+RUN apt-get update && apt-get install -y procps
+
 # Set the working directory
 WORKDIR /app
 
