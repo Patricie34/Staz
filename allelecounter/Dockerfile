@@ -1,23 +1,30 @@
 # Use a base image with Miniconda3
 FROM continuumio/miniconda3:latest
 
-# Install procps to get the 'ps' command
-RUN apt-get update && apt-get install -y procps
+# Install system dependencies needed for R packages and devtools
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev \
+    git \
+    build-essential \
+    procps \
+    && apt-get clean
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy the environment YAML file
-COPY conda.yml /app/conda.yml
+# Copy the conda environment file
+COPY ascat_env.yml /app/ascat_env.yml
 
-# Create the environment with a custom path
-RUN conda env create -f /app/conda.yml --prefix /opt/conda/envs/myenv
+# Create the environment
+RUN conda env create -f /app/ascat_env.yml --prefix /opt/conda/envs/ascat_env
 
-# Activate the environment
-RUN echo "conda activate myenv" >> ~/.bashrc
+# Set the environment to use in following RUN commands
+SHELL ["conda", "run", "-n", "ascat_env", "/bin/bash", "-c"]
 
-# Set the default environment to activate
-SHELL ["conda", "run", "-n", "myenv", "/bin/bash", "-c"]
+# Install ASCAT from GitHub (R package)
+RUN Rscript -e "devtools::install_github('VanLoo-lab/ascat/ASCAT')"
 
-# Set the default command for the container
+# Default command
 CMD ["bash"]
