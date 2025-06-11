@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .                    # Adjust if your Dockerfile is in a subfolder
-          file: ./sniffles2            # Adjust if Dockerfile is not in repo root
+          file: ./sniffles2/Dockerfile            # Adjust if Dockerfile is not in repo root
           push: true
           tags: ${{ secrets.USER_NAME }}/sniffles2-image:v1.0
           no-cache: true
