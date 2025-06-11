@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main  # Adjust this if you want to trigger on a different branch
+    paths: allelecounter/**
 
 jobs:
   build:
