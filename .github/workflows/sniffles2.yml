@@ -3,7 +3,8 @@ name: Build and Publish Docker Image with Sniffles2
 on:
   push:
     branches:
-      - main  
+      - main
+    paths: sniffles2/**
 
 jobs:
   build:
