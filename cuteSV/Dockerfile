@@ -4,6 +4,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         git \
         build-essential \
+        pip \
     && rm -rf /var/lib/apt/lists/*
 
 RUN addgroup cutesvgroup && \
@@ -12,10 +13,12 @@ RUN addgroup cutesvgroup && \
 WORKDIR /app
 RUN chown -R cutesvuser:cutesvgroup /app
 
-# Clone and install cuteSV before switching to non-root
+# Clone the cuteSV repository
 RUN git clone https://github.com/tjiangHIT/cuteSV.git /app/cuteSV
-WORKDIR /app/cuteSV
-RUN python setup.py install
 
-# Now drop to non-root user
+# Install using pip (modern method)
+WORKDIR /app/cuteSV
+RUN pip install .
+
+# Drop to non-root user
 USER 1000
