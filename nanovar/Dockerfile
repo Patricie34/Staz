@@ -95,3 +95,4 @@ RUN chown -R nanovar:nanovargroup /app/nanovar
 USER 1000
 
 WORKDIR /app/nanovar
+
