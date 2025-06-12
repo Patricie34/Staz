@@ -23,3 +23,4 @@ RUN git clone https://github.com/tjiangHIT/cuteSV.git /app/cuteSV
 # Install cuteSV using setup.py
 WORKDIR /app/cuteSV
 RUN python setup.py install
+
