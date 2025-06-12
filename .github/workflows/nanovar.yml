@@ -1,4 +1,4 @@
-name: Build and Publish Docker Image with nanoVar
+name: Build and Publish Docker Image with nanovar
 
 on:
   push:
