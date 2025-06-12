@@ -10,11 +10,14 @@ RUN groupadd -g 1000 nanovargroup && \
 WORKDIR /app/nanovar
 
 # Install conda environment with system bio tools
-RUN conda create -n nanovar-env -c conda-forge -y \
-    python=3.11 \
-    bedtools=2.26.0 \
-    samtools=1.3.0 \
-    minimap2=2.17 && \
+RUN conda config --add channels defaults && \
+    conda config --add channels bioconda && \
+    conda config --add channels conda-forge && \
+    conda create -n nanovar-env -y \
+        python=3.11 \
+        bedtools=2.31.1 \
+        samtools=1.22 \
+        minimap2=2.29 && \
     conda clean -afy
 
 # Copy Python requirements
