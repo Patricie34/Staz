@@ -1,4 +1,4 @@
-name: Build and Publish Docker Image with cuteSV
+name: Build and Publish Docker Image with nanoVar
 
 on:
   push:
@@ -27,10 +27,10 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@v3  # Updated to v3 for latest features
         with:
-          context: ./nanoVar
-          file: ./nanoVar/Dockerfile
+          context: ./nanovar
+          file: ./nanovar/Dockerfile
           push: true
           tags: |
-            ${{ secrets.USER_NAME }}/nanoVar-image:v1.0
-            ${{ secrets.USER_NAME }}/nanoVar-image:${{ github.sha }}
+            ${{ secrets.USER_NAME }}/nanovar-image:v1.0
+            ${{ secrets.USER_NAME }}/nanovar-image:${{ github.sha }}
           no_cache: true  # Disable caching for each build
