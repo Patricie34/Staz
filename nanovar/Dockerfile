@@ -2,8 +2,13 @@ FROM continuumio/miniconda3
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Create group and user with UID/GID 1000
-RUN groupadd -g 1000 nanovargroup && \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create group and user with UID 1000
+RUN groupadd nanovargroup && \
     useradd -m -u 1000 -g nanovargroup -s /bin/bash nanovar
 
 # Set working directory
