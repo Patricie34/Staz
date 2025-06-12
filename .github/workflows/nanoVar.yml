@@ -5,7 +5,7 @@ on:
     branches:
       - main  # Adjust this if you want to trigger on a different branch
     paths:
-      - nanoVar/**  # Adjust the path to match your directory structure
+      - nanovar/**  # Adjust the path to match your directory structure
 
 jobs:
   build:
