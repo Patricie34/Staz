@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     g++ \
+    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Create group and user with UID 1000
@@ -32,7 +33,7 @@ COPY requirements.txt .
 RUN /bin/bash -c "source activate nanovar-env && pip install --no-cache-dir -r requirements.txt"
 
 # Update PATH to use the conda environment
-ENV PATH /opt/conda/envs/nanovar-env/bin:$PATH
+ENV PATH=/opt/conda/envs/nanovar-env/bin:$PATH
 
 # Set permissions
 RUN chown -R nanovar:nanovargroup /app/nanovar
