@@ -31,6 +31,6 @@ jobs:
           file: ./cuteSV/Dockerfile
           push: true
           tags: |
-            tags: ${{ secrets.USER_NAME }}/cutesv-image:v1.0
+            ${{ secrets.USER_NAME }}/cutesv-image:v1.0
             ${{ secrets.USER_NAME }}/cutesv-image:${{ github.sha }}
           no_cache: true  # Disable caching for each build
