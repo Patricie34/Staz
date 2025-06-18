@@ -37,7 +37,7 @@ RUN curl -fsSL https://github.com/samtools/htslib/releases/download/${HTSLIB_VER
     echo "HTSLIB installed to: $(which tabix)" && tabix --help && \
     cd .. && rm -rf htslib-${HTSLIB_VERSION}
 
-# Install Samtools
+# Install Samtools 
 ENV SAMTOOLS_VERSION=1.19
 RUN curl -fsSL https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 | tar -xj && \
     cd samtools-${SAMTOOLS_VERSION} && \
