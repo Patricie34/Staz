@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
     build-essential \
     zlib1g-dev \
+    libbz2-dev \
     curl \
     make \
     gcc \
