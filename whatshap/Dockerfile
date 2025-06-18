@@ -20,39 +20,43 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     autoconf \
     automake \
     libtool \
+    ca-certificates \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install WhatsHap using pip
 RUN pip3 install --no-cache-dir --upgrade pip whatshap
 
-# Install HTSlib (to get bgzip and tabix)
+# Install HTSlib (for bgzip, tabix)
 ENV HTSLIB_VERSION=1.19
 RUN curl -fsSL https://github.com/samtools/htslib/releases/download/${HTSLIB_VERSION}/htslib-${HTSLIB_VERSION}.tar.bz2 | tar -xj && \
     cd htslib-${HTSLIB_VERSION} && \
     ./configure --prefix=/usr/local && \
     make -j$(nproc) && \
     make install && \
+    echo "HTSLIB installed to: $(which bgzip)" && bgzip --help && \
+    echo "HTSLIB installed to: $(which tabix)" && tabix --help && \
     cd .. && rm -rf htslib-${HTSLIB_VERSION}
 
-# Install Samtools (use same version as HTSlib)
+# Install Samtools
 ENV SAMTOOLS_VERSION=1.19
 RUN curl -fsSL https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 | tar -xj && \
     cd samtools-${SAMTOOLS_VERSION} && \
     ./configure --prefix=/usr/local && \
     make -j$(nproc) && \
     make install && \
+    echo "Samtools installed to: $(which samtools)" && samtools --version && \
     cd .. && rm -rf samtools-${SAMTOOLS_VERSION}
 
-# Create a non-root user with UID 1000 (group will be auto-created)
+# Create a non-root user with UID 1000 (group auto-created)
 RUN useradd -m -u 1000 -s /bin/bash user
 
 # Set working directory
 WORKDIR /app
 
-# Ensure the directory is owned by the new user
+# Ensure directory is owned by the new user
 RUN chown user:user /app
 
-# Switch to the created non-root user
+# Switch to non-root user
 USER 1000
 
 # Default command
