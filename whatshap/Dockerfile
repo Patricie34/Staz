@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     make \
     gcc \
+    autoconf \
+    automake \
+    libtool \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install WhatsHap using pip
@@ -29,6 +32,15 @@ RUN curl -fsSL https://github.com/samtools/htslib/releases/download/${HTSLIB_VER
     make -j$(nproc) && \
     make install && \
     cd .. && rm -rf htslib-${HTSLIB_VERSION}
+
+# Install Samtools (use same version as HTSlib)
+ENV SAMTOOLS_VERSION=1.19
+RUN curl -fsSL https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 | tar -xj && \
+    cd samtools-${SAMTOOLS_VERSION} && \
+    ./configure --prefix=/usr/local && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && rm -rf samtools-${SAMTOOLS_VERSION}
 
 # Create a non-root user with UID 1000 (group will be auto-created)
 RUN useradd -m -u 1000 -s /bin/bash user
