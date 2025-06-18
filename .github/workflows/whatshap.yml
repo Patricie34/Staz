@@ -29,5 +29,5 @@ jobs:
           context: ./whatshap
           file: ./whatshap/Dockerfile
           push: true
-          tags: ${{ secrets.USER_NAME }}/whatshap-image:v1.0
+          tags: ${{ secrets.USER_NAME }}/whatshap-image:v1.1
           no-cache: true
