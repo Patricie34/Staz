@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zlib1g-dev \
     libbz2-dev \
     liblzma-dev \
+    libncurses-dev \
     curl \
     make \
     gcc \
