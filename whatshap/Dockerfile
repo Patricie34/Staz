@@ -11,11 +11,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
     build-essential \
     zlib1g-dev \
-    htslib \
+    curl \
+    make \
+    gcc \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install WhatsHap using pip
 RUN pip3 install --no-cache-dir --upgrade pip whatshap
+
+# Install HTSlib (to get bgzip and tabix)
+ENV HTSLIB_VERSION=1.19
+RUN curl -fsSL https://github.com/samtools/htslib/releases/download/${HTSLIB_VERSION}/htslib-${HTSLIB_VERSION}.tar.bz2 | tar -xj && \
+    cd htslib-${HTSLIB_VERSION} && \
+    ./configure --prefix=/usr/local && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && rm -rf htslib-${HTSLIB_VERSION
 
 # Create a non-root user with UID 1000 (group will be auto-created)
 RUN useradd -m -u 1000 -s /bin/bash user
