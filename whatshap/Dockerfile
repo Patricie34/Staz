@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     zlib1g-dev \
     libbz2-dev \
+    liblzma-dev \
     curl \
     make \
     gcc \
