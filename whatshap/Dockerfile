@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
     build-essential \
     zlib1g-dev \
-    htslib-tools \
+    htslib \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install WhatsHap using pip
