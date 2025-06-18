@@ -26,7 +26,7 @@ RUN curl -fsSL https://github.com/samtools/htslib/releases/download/${HTSLIB_VER
     ./configure --prefix=/usr/local && \
     make -j$(nproc) && \
     make install && \
-    cd .. && rm -rf htslib-${HTSLIB_VERSION
+    cd .. && rm -rf htslib-${HTSLIB_VERSION}
 
 # Create a non-root user with UID 1000 (group will be auto-created)
 RUN useradd -m -u 1000 -s /bin/bash user
