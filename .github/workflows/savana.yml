@@ -29,5 +29,5 @@ jobs:
           context: ./savana
           file: ./savana/Dockerfile
           push: true
-          tags: ${{ secrets.USER_NAME }}/savana-image:v1.0
+          tags: ${{ secrets.USER_NAME }}/savana-image:v1.3.5
           no-cache: true
