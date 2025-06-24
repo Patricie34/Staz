@@ -29,5 +29,5 @@ jobs:
           context: ./severus
           file: ./severus/Dockerfile
           push: true
-          tags: ${{ secrets.USER_NAME }}/severus-image:v1.0
+          tags: ${{ secrets.USER_NAME }}/severus-image:v1.5
           no-cache: true
