@@ -1,4 +1,4 @@
-name: Build and Publish Docker Image with Whatshap
+name: Build and Publish Docker Image with Severus
 
 on:
   push:
