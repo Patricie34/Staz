@@ -1,0 +1,17 @@
+name: severus
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python>=3.8
+  - setuptools
+  - samtools>=1.14
+  - networkx>=2.6
+  - pygraphviz
+  - pydot
+  - matplotlib-base
+  - biopython
+  - numpy
+  - pysam
+  - plotly
