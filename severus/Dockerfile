@@ -14,7 +14,7 @@ RUN conda env create -f environment.yml && \
 # Add Conda env to PATH
 ENV PATH /opt/conda/envs/severus/bin:$PATH
 
-# Install Severus from GitHub
+# Install Severus from GitHub, latest version
 RUN git clone https://github.com/KolmogorovLab/Severus.git && \
     cd Severus && \
     python setup.py install && \
