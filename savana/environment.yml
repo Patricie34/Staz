@@ -1,6 +1,7 @@
 # This file may be used to create an environment using:
 # $ conda env create --name <env> --file environment.yml
 # platform: linux-64
+name: savana
 channels:
   - conda-forge
   - bioconda
