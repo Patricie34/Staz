@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     zlib1g-dev \
+    procps \  
     gcc \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
