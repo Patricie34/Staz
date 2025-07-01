@@ -1,24 +1,36 @@
-FROM python:3.9-slim
+# Base image with correct Python version
+FROM python:3.10.15-slim
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        git \
-        build-essential \
-        pip \
-    && rm -rf /var/lib/apt/lists/*
+# Avoid interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN addgroup cutesvgroup && \
-    useradd -m -u 1000 -s /bin/bash -g cutesvgroup cutesvuser
+# Install required system packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    zlib1g-dev \
+    procps \
+    gcc \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Upgrade pip and install cuteSV with dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir \
+        cuteSV==2.1.2 \
+        scipy \
+        pysam \
+        biopython \
+        cigar \
+        numpy \
+        pyvcf3 \
+        scikit-learn
+
+# Create non-root user with UID 1000
+RUN useradd -m -u 1000 -s /bin/bash user
+
+# Set working directory and fix permissions
 WORKDIR /app
-RUN chown -R cutesvuser:cutesvgroup /app
+RUN chown user:user /app
 
-# Clone the cuteSV repository
-RUN git clone https://github.com/tjiangHIT/cuteSV.git /app/cuteSV
-
-# Install using pip (modern method)
-WORKDIR /app/cuteSV
-RUN pip install .
-
-# Drop to non-root user
+# Switch to the created user
 USER 1000
