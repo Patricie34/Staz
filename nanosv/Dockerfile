@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install NanoSV from PyPI
 RUN pip install NanoSV
 
-# Create non-root user with UID 1000
+# Create non-root user
 RUN useradd -m -u 1000 -s /bin/bash user
 
 # Set working directory and fix permissions
