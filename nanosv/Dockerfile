@@ -10,6 +10,9 @@ RUN pip install NanoSV
 
 # Create non-root user
 RUN useradd -m -u 1000 -s /bin/bash user
+
 WORKDIR /app
+
 RUN chown user:user /app
+
 USER 1000
