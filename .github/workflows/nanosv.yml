@@ -31,6 +31,6 @@ jobs:
           file: ./nanosv/Dockerfile
           push: true
           tags: |
-            ${{ secrets.USER_NAME }}/nanosv-image:v1.0
+            ${{ secrets.USER_NAME }}/nanosv-image:v1.1
             ${{ secrets.USER_NAME }}/nanosv-image:${{ github.sha }}
           no_cache: true  # Disable caching for each build
