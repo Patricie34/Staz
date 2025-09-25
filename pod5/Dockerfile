@@ -1,11 +1,8 @@
 # Use the existing Pod5
 FROM quay.io/biocontainers/pod5:0.3.33--pyhdfd78af_0
 
-# Install rsync
-RUN apt-get update && \
-    apt-get install -y rsync && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN conda install -y -c conda-forge rsync && \
+    conda clean --all -y && \
 
 # Create a non-root user with UID 1000 
 RUN useradd -m -u 1000 -s /bin/bash user
