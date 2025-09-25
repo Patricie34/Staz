@@ -1,4 +1,4 @@
-# Use the existing Pod5 container as base
+# Use the existing Pod5
 FROM quay.io/biocontainers/pod5:0.3.33--pyhdfd78af_0
 
 # Install rsync
