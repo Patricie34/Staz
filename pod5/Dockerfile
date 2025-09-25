@@ -10,7 +10,7 @@ RUN apt-get update && \
 # Create a non-root user with UID 1000 
 RUN useradd -m -u 1000 -s /bin/bash user
 
-# Set working directory
+# Set workdir
 WORKDIR /app
 
 # Ensure directory is owned by the new user
