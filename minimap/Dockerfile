@@ -1,14 +1,13 @@
 # ------------------------------------------------------------
-#  Docker image: latest Minimap2 + latest stable Samtools
+#  Docker image: latest Minimap2 + latest HTSlib + latest Samtools
 #  Ubuntu 22.04 base, non‑root user, /data as workdir
 # ------------------------------------------------------------
 FROM ubuntu:22.04
 
-LABEL maintainer="your_email@example.com"
-LABEL description="Docker image with the latest Minimap2 and Samtools (built from source)."
+LABEL description="Docker image with Minimap2, HTSlib and Samtools (all built from source)."
 
 # -----------------------------------------------------------------
-#  Environment
+#  Global environment
 # -----------------------------------------------------------------
 ENV DEBIAN_FRONTEND=noninteractive \
     PATH="/usr/local/bin:${PATH}"
@@ -23,7 +22,7 @@ RUN apt-get update && \
         curl \
         gnupg \
         git \
-        build-essential \
+        build-essential \          # gcc, g++, make, …
         zlib1g-dev \
         libbz2-dev \
         liblzma-dev \
@@ -48,25 +47,39 @@ RUN git clone --depth 1 https://github.com/lh3/minimap2.git && \
     cd .. && rm -rf minimap2
 
 # -----------------------------------------------------------------
-#  Install Samtools (latest stable release from the git repo)
+#  1️⃣ Build and install HTSlib (latest master)
 # -----------------------------------------------------------------
-# 1️⃣ Clone Samtools *with* its htslib sub‑module
-# 2️⃣ Generate the configure script with autoreconf
-# 3️⃣ Build & install
+WORKDIR /opt
+RUN git clone --depth 1 --branch master \
+              --recurse-submodules https://github.com/samtools/htslib.git && \
+    cd htslib && \
+    autoreconf -i && \                # generate ./configure
+    ./configure --prefix=/usr/local && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && rm -rf htslib
+
+# -----------------------------------------------------------------
+#  2️⃣ Build and install Samtools (latest master) – link to the HTSlib we just built
+# -----------------------------------------------------------------
 WORKDIR /opt
 RUN git clone --depth 1 --branch master \
               --recurse-submodules https://github.com/samtools/samtools.git && \
     cd samtools && \
-    autoreconf -i && \ 
-    ./configure --prefix=/usr/local && \
+    # Ensure the submodule is fully present (no‑op if already complete)
+    git submodule update --init --recursive && \
+    autoreconf -i && \                # generate ./configure
+    ./configure --prefix=/usr/local --with-htslib=/usr/local && \
     make -j$(nproc) && \
     make install && \
     cd .. && rm -rf samtools
 
 # -----------------------------------------------------------------
-#  Verify that the binaries are there (optional but helpful)
+#  Verify that the three binaries are available (optional but helpful)
 # -----------------------------------------------------------------
-RUN samtools --version && minimap2 --version
+RUN samtools --version && \
+    minimap2 --version && \
+    htslib --version   # htslib installs a tiny helper called “htsfile”
 
 # -----------------------------------------------------------------
 #  Create a non‑root user (UID 1000) and give it ownership of /data
@@ -84,8 +97,3 @@ RUN chown appuser:app /data
 #  Switch to the non‑root user for the rest of the container life‑time
 # -----------------------------------------------------------------
 USER appuser
-
-# -----------------------------------------------------------------
-#  Default entrypoint – a shell so the image can be used as a toolbox
-# -----------------------------------------------------------------
-ENTRYPOINT ["/bin/bash"]
