@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-LABEL description="Simple Docker image with minimap2 and samtools"
+LABEL description="Docker image with minimap2 v2.30 and samtools v1.20"
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -17,9 +17,10 @@ RUN apt-get update && apt-get install -y \
     tar \
     bzip2 \
     xz-utils \
+    pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Samtools (includes htslib)
+# Install Samtools (without curses for tview)
 RUN curl -L -o samtools-1.20.tar.bz2 https://github.com/samtools/samtools/releases/download/1.20/samtools-1.20.tar.bz2 \
     && tar -xjf samtools-1.20.tar.bz2 \
     && cd samtools-1.20 \
