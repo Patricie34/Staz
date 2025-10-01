@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-LABEL description="Docker image with minimap2 v2.30 and samtools v1.20"
+LABEL description="Image with minimap2 v2.30 and samtools v1.20"
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
