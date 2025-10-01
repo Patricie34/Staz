@@ -29,5 +29,5 @@ jobs:
           context: ./minimap
           file: ./minimap/Dockerfile
           push: true
-          tags: ${{ secrets.USER_NAME }}/minimap-image:v1.1
+          tags: ${{ secrets.USER_NAME }}/minimap-image:v1.2
           no-cache: true
