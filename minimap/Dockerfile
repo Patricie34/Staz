@@ -72,4 +72,3 @@ RUN chown user:user /app
 
 # Switch to non-root user
 USER 1000
-v
