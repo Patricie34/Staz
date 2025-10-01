@@ -26,7 +26,7 @@ RUN apt-get update && \
         wget \
         curl \
         git \
-        build-essential \          # gcc, g++, make, …
+        build-essential \
         autoconf \
         automake \
         libtool \
@@ -36,7 +36,6 @@ RUN apt-get update && \
         liblzma-dev \
         libcurl4-openssl-dev \
         libssl-dev \
-        # ***  <-- added ncurses development libs ***
         libncurses5-dev \
         libncursesw5-dev && \
     rm -rf /var/lib/apt/lists/*
