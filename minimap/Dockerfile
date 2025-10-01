@@ -37,7 +37,7 @@ RUN apt-get update && \
 ARG SAMTOOLS_REPO="https://github.com/samtools/samtools.git"
 ARG SAMTOOLS_TAG="master"          # change to a tag/branch if you want a specific release
 
-RUN git clone --depth 1 --branch ${SAMTOOLS_TAG} ${SAMTOOLS_REPO} /opt/samtools && \
+RUN git clone --depth 1 --branch --recurse-submodules ${SAMTOOLS_TAG} ${SAMTOOLS_REPO} /opt/samtools && \
     cd /opt/samtools && \
     make -j$(nproc) && \
     make install && \
@@ -62,9 +62,14 @@ RUN git clone --depth 1 --branch ${MINIMAP2_TAG} ${MINIMAP2_REPO} /opt/minimap2 
 # ------------------------------------------------------------
 RUN samtools --version && \
     minimap2 --version
+    
+# Optional: create a non-root user
+RUN useradd -m -u 1000 -s /bin/bash user
 
-# ------------------------------------------------------------
-#   5. Set a minimal entrypoint (allows the container to be used
-#      as a command‑line tool collection)
-# ------------------------------------------------------------
-ENTRYPOINT ["/bin/bash"]
+# Set working directory
+WORKDIR /app
+RUN chown user:user /app
+
+# Switch to non-root user
+USER 1000
+v
