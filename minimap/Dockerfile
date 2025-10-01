@@ -22,7 +22,7 @@ RUN apt-get update && \
         curl \
         gnupg \
         git \
-        build-essential \          # gcc, g++, make, …
+        build-essential \
         zlib1g-dev \
         libbz2-dev \
         liblzma-dev \
@@ -53,7 +53,7 @@ WORKDIR /opt
 RUN git clone --depth 1 --branch master \
               --recurse-submodules https://github.com/samtools/htslib.git && \
     cd htslib && \
-    autoreconf -i && \                # generate ./configure
+    autoreconf -i && \
     ./configure --prefix=/usr/local && \
     make -j$(nproc) && \
     make install && \
@@ -68,7 +68,7 @@ RUN git clone --depth 1 --branch master \
     cd samtools && \
     # Ensure the submodule is fully present (no‑op if already complete)
     git submodule update --init --recursive && \
-    autoreconf -i && \                # generate ./configure
+    autoreconf -i && \
     ./configure --prefix=/usr/local --with-htslib=/usr/local && \
     make -j$(nproc) && \
     make install && \
@@ -79,7 +79,7 @@ RUN git clone --depth 1 --branch master \
 # -----------------------------------------------------------------
 RUN samtools --version && \
     minimap2 --version && \
-    htslib --version   # htslib installs a tiny helper called “htsfile”
+    htslib --version
 
 # -----------------------------------------------------------------
 #  Create a non‑root user (UID 1000) and give it ownership of /data
