@@ -19,7 +19,7 @@ RUN apt-get update && \
         wget \
         curl \
         gnupg \
-        build-essential \                # gcc, make, etc.
+        build-essential \
         libncurses5-dev \
         libncursesw5-dev \
         zlib1g-dev \
@@ -28,7 +28,7 @@ RUN apt-get update && \
         libcurl4-gnutls-dev \
         libssl-dev \
         libgomp1 \
-        git \                            # needed for cloning the sources
+        git \
         python3 \
         python3-pip && \
     rm -rf /var/lib/apt/lists/*
@@ -37,7 +37,7 @@ RUN apt-get update && \
 #  Build Samtools (clone with sub‑modules)
 # -----------------------------------------------------------------
 ARG SAMTOOLS_REPO="https://github.com/samtools/samtools.git"
-ARG SAMTOOLS_TAG="master"          # change to a tag (e.g. v1.21) for reproducibility
+ARG SAMTOOLS_TAG="master"
 
 RUN git clone --depth 1 \
               --branch ${SAMTOOLS_TAG} \
