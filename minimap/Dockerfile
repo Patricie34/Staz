@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
 RUN curl -L -o samtools-1.20.tar.bz2 https://github.com/samtools/samtools/releases/download/1.20/samtools-1.20.tar.bz2 \
     && tar -xjf samtools-1.20.tar.bz2 \
     && cd samtools-1.20 \
-    && ./configure --prefix=/usr/local \
+    && ./configure --prefix=/usr/local --without-curses \
     && make -j"$(nproc)" && make install \
     && cd .. && rm -rf samtools-1.20 samtools-1.20.tar.bz2
 
