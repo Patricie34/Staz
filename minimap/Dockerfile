@@ -1,14 +1,19 @@
+# ============================================================
+#  Minimal Genomics Toolbox – HTSlib + Samtools + Minimap2
+#  (ncurses development packages added so Samtools builds)
+# ============================================================
+
 # ------------------------------------------------------------
 #  Stage 1 – compile everything
 # ------------------------------------------------------------
-ARG UBUNTU_VERSION=24.04          # you can change this to 22.04 if you like
-ARG HTSLIB_VERSION=1.21           # change to the release you need
-ARG SAMTOOLS_VERSION=1.21         # must be compatible with the HTSlib above
+ARG UBUNTU_VERSION=24.04          # change to 22.04 if you prefer
+ARG HTSLIB_VERSION=1.21           # adjust to the release you need
+ARG SAMTOOLS_VERSION=1.21         # must match the HTSlib above
 ARG MINIMAP2_VERSION=2.30         # latest at time of writing
 
 FROM ubuntu:${UBUNTU_VERSION} AS builder
 
-# ----- re‑declare the arguments for this stage -----------------
+# ----- re‑declare the version arguments for this stage ----------
 ARG HTSLIB_VERSION
 ARG SAMTOOLS_VERSION
 ARG MINIMAP2_VERSION
@@ -21,7 +26,7 @@ RUN apt-get update && \
         wget \
         curl \
         git \
-        build-essential \
+        build-essential \          # gcc, g++, make, …
         autoconf \
         automake \
         libtool \
@@ -30,7 +35,10 @@ RUN apt-get update && \
         libbz2-dev \
         liblzma-dev \
         libcurl4-openssl-dev \
-        libssl-dev && \
+        libssl-dev \
+        # ***  <-- added ncurses development libs ***
+        libncurses5-dev \
+        libncursesw5-dev && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/build
@@ -95,23 +103,23 @@ RUN apt-get update && \
         libncursesw6 && \
     rm -rf /var/lib/apt/lists/*
 
-# ---- copy the compiled binaries and libraries from the builder ----
+# ---- copy the compiled tools and libraries from the builder stage ----
 COPY --from=builder /opt/build /usr/local
 
 # Ensure the dynamic linker sees the libraries we just copied
 RUN ldconfig
 
-# ---- non‑root user ------------------------------------------------
+# ---- create a non‑root user ---------------------------------
 ARG USER=worker
 ARG UID=2000
 ARG GID=2000
 RUN groupadd -g ${GID} ${USER} && \
     useradd -m -u ${UID} -g ${GID} -s /bin/bash ${USER}
 
-# ---- environment ---------------------------------------------------
+# ---- environment -------------------------------------------
 ENV PATH="/usr/local/bin:${PATH}"
 WORKDIR /data
 USER ${USER}
 
-# ---- default command (interactive shell) -------------------------
+# ---- default command (interactive shell) --------------------
 CMD ["bash"]
