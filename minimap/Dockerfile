@@ -11,8 +11,6 @@ RUN apt-get update && \
         make \
         gcc \
         g++ \
-        autoconf \
-        automake \
         zlib1g-dev \
         libbz2-dev \
         liblzma-dev \
@@ -36,7 +34,6 @@ RUN mkdir -p ${BUILD_DIR}/bin
 RUN curl -fsSL -o htslib-${HTSLIB_VERSION}.tar.bz2 https://github.com/samtools/htslib/releases/download/${HTSLIB_VERSION}/htslib-${HTSLIB_VERSION}.tar.bz2 \
     && tar -xjf htslib-${HTSLIB_VERSION}.tar.bz2 \
     && cd htslib-${HTSLIB_VERSION} \
-    && autoheader && autoconf || true \
     && ./configure --prefix=${BUILD_DIR} \
     && make -j"$(nproc)" && make install \
     && cd .. && rm -rf htslib-${HTSLIB_VERSION} htslib-${HTSLIB_VERSION}.tar.bz2
