@@ -1,10 +1,10 @@
-name: Build and Publish Docker Image with nonB_gfa
+name: Build and Publish Docker Image with nonb_gfa
 
 on:
   push:
     branches:
       - main  # Adjust this if you want to trigger on a different branch
-    paths: nonB_gfa/**
+    paths: nonb_gfa/**
 
 jobs:
   build:
@@ -26,8 +26,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5  # Updated to v5 for stability and features
         with:
-          context: ./nonB_gfa
-          file: ./nonB_gfa/Dockerfile
+          context: ./nonb_gfa
+          file: ./nonb_gfa/Dockerfile
           push: true
-          tags: ${{ secrets.USER_NAME }}/nonB_gfa-image:v1.1
+          tags: ${{ secrets.USER_NAME }}/nonb_gfa-image:v1.1
           no-cache: true
