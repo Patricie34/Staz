@@ -24,9 +24,9 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # Install non-B DNA GFA tool
 # ---------------------------
 RUN git clone https://github.com/abcsFrederick/non-B_gfa.git /opt/non-B_gfa && \
-    cd /opt/non-B_gfa/gfa && \
+    cd /opt/non-B_gfa && \
     make && \
-    ln -s /opt/non-B_gfa/gfa/gfa /usr/local/bin/gfa && \
+    ln -s /opt/non-B_gfa/gfa /usr/local/bin/gfa && \
     cd / && rm -rf /opt/non-B_gfa
 
 # ---------------------------
