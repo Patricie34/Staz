@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     python3 \
     python3-pip \
+    python3-setuptools \
     bedtools \
     samtools \
     ca-certificates \
@@ -28,11 +29,6 @@ RUN git clone https://github.com/abcsFrederick/non-B_gfa.git /opt/non-B_gfa && \
     make && \
     ln -s /opt/non-B_gfa/gfa /usr/local/bin/gfa && \
     cd / && rm -rf /opt/non-B_gfa
-
-# ---------------------------
-# Python utilities (optional)
-# ---------------------------
-RUN pip3 install pandas numpy pybedtools
 
 # ---------------------------
 # Create non-root user
