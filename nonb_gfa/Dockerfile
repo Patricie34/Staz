@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # ---------------------------
-# Install non-B DNA GFA tool
+# Install non-B DNA gfa tool
 # ---------------------------
 RUN git clone https://github.com/abcsFrederick/non-B_gfa.git /opt/non-B_gfa && \
     cd /opt/non-B_gfa && \
