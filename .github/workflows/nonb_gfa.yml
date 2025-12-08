@@ -29,5 +29,5 @@ jobs:
           context: ./nonb_gfa
           file: ./nonb_gfa/Dockerfile
           push: true
-          tags: ${{ secrets.USER_NAME }}/nonb_gfa-image:v1.1
+          tags: ${{ secrets.USER_NAME }}/nonb_gfa-image:v1.2
           no-cache: true
