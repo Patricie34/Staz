@@ -27,8 +27,14 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN git clone https://github.com/abcsFrederick/non-B_gfa.git /opt/non-B_gfa && \
     cd /opt/non-B_gfa && \
     make && \
-    ln -s /opt/non-B_gfa/gfa /usr/local/bin/gfa && \
-    cd / && rm -rf /opt/non-B_gfa
+    cp gfa /usr/local/bin/ && \
+    chmod +x /usr/local/bin/gfa
+
+# ---------------------------
+# Python utilities (optional)
+# ---------------------------
+RUN pip3 install --upgrade pip setuptools && \
+    pip3 install pandas numpy pybedtools
 
 # ---------------------------
 # Create non-root user
