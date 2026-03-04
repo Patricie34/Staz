@@ -23,7 +23,7 @@ RUN conda config --add channels defaults && \
         sansa=0.2.5 \
         htslib \
         bcftools \
-    conda clean -afy
+&& conda clean -afy
 
 
 # Update PATH to use the conda environment
