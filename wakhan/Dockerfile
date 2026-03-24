@@ -35,5 +35,4 @@ USER 1000
 RUN python -m pip install --no-cache-dir -e .
 
 # Default command
-ENTRYPOINT ["python", "wakhan.py"]
-CMD ["--help"]
+CMD ["wakhan", "--help"]
