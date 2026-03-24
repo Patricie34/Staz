@@ -29,5 +29,5 @@ jobs:
           context: ./wakhan
           file: ./wakhan/Dockerfile
           push: true
-          tags: ${{ secrets.USER_NAME }}/wakhan-image:v1.0
+          tags: ${{ secrets.USER_NAME }}/wakhan-image:v1.2
           no-cache: true
