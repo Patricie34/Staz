@@ -1,4 +1,3 @@
-# Base image with Miniconda
 FROM continuumio/miniconda3
 
 # Set working directory
