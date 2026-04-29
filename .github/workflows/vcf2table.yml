@@ -29,5 +29,5 @@ jobs:
           context: ./vcf2table
           file: ./vcf2table/Dockerfile
           push: true
-          tags: ${{ secrets.USER_NAME }}/vcf2table-image:v1.2
+          tags: ${{ secrets.USER_NAME }}/vcf2table-image:v1.3
           no-cache: true
