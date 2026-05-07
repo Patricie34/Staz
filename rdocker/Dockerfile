@@ -10,8 +10,8 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install the required CRAN packages
-RUN R -e "install.packages(c('ggplot2', 'scales', 'gtable', 'grid'), repos='http://cran.rstudio.com/')"
+# Install the required CRAN packages (ADDED: gridExtra, cowplot, data.table)
+RUN R -e "install.packages(c('ggplot2', 'scales', 'gridExtra', 'cowplot', 'data.table'), repos='http://cran.rstudio.com/')"
 
 # Install Bioconductor packages
 RUN R -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); \
@@ -20,4 +20,3 @@ RUN R -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages
 
 # Set the working directory
 WORKDIR /home/rstudio
-
