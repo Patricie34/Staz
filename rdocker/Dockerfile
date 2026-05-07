@@ -10,10 +10,10 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install the required CRAN packages
-RUN R -e "install.packages(c('ggplot2', 'scales', 'gridExtra', 'cowplot', 'data.table'), repos='http://cran.rstudio.com/')"
+# Install the required CRAN packages (ADDED: R.utils)
+RUN R -e "install.packages(c('ggplot2', 'scales', 'gridExtra', 'cowplot', 'data.table', 'R.utils'), repos='http://cran.rstudio.com/')"
 
-# Install Bioconductor packages (FIXED: added ask = FALSE)
+# Install Bioconductor packages
 RUN R -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); \
            BiocManager::install(version = '3.19', ask = FALSE); \
            BiocManager::install('DNAcopy', ask = FALSE)"
