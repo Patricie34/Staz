@@ -28,4 +28,4 @@ jobs:
       with:
         context: ./rdocker
         push: true
-        tags: ${{ secrets.USER_NAME }}/my-r-dnacopy-image:v2
+        tags: ${{ secrets.USER_NAME }}/my-r-dnacopy-image:v3
