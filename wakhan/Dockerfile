@@ -21,7 +21,7 @@ ENV PATH /opt/conda/envs/wakhan/bin:$PATH
 # Clone Wakhan from source
 RUN git clone https://github.com/KolmogorovLab/Wakhan.git /app/Wakhan && \
     cd /app/Wakhan && \
-    git checkout 0218b4f
+    git checkout 0.4.3
 
 WORKDIR /app/Wakhan
 
