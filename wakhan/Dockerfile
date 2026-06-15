@@ -19,9 +19,7 @@ RUN conda env create -f environment.yml -n wakhan && \
 ENV PATH /opt/conda/envs/wakhan/bin:$PATH
 
 # Clone Wakhan from source
-RUN git clone https://github.com/KolmogorovLab/Wakhan.git /app/Wakhan && \
-    cd /app/Wakhan && \
-    git checkout 0.4.3
+RUN git clone --branch main --depth 1 https://github.com/KolmogorovLab/Wakhan.git /app/Wakhan
 
 WORKDIR /app/Wakhan
 
