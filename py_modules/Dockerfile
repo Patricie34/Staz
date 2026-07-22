@@ -4,6 +4,7 @@ FROM python:3.10-slim
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
+    procps \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python packages
