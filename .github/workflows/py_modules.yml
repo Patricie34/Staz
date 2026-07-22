@@ -29,5 +29,5 @@ jobs:
           context: ./py_modules
           file: ./py_modules/Dockerfile
           push: true
-          tags: ${{ secrets.USER_NAME }}/py_modules-image:v1.1
+          tags: ${{ secrets.USER_NAME }}/py_modules-image:v1.2
           no-cache: true
