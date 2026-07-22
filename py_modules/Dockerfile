@@ -12,7 +12,8 @@ RUN pip install --no-cache-dir \
     matplotlib \
     seaborn \
     scipy \
-    numpy
+    numpy \
+    argparse
 
 # Create non-root user
 RUN useradd -m -u 1000 -s /bin/bash user
