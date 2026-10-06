@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Upgrade pip and install cuteSV with dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir \
-        cuteSV==2.1.2 \
+        cuteSV==2.1.4 \
         scipy \
         pysam \
         biopython \
