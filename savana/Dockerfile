@@ -14,7 +14,7 @@ RUN conda env create -f environment.yml && \
 # Activate the environment by adding it to PATH
 ENV PATH /opt/conda/envs/savana/bin:$PATH
 
-# Install Savana from GitHub, latest version
+# Install Savana from GitHub, latest version (1.3.8)
 RUN git clone https://github.com/cortes-ciriano-lab/savana.git && \
     cd savana && \
     pip install . && \
