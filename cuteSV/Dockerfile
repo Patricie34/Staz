@@ -14,13 +14,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip and install cuteSV with dependencies
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir \
+RUN python -m pip install --no-cache-dir --upgrade pip && \
+    python -m pip install --no-cache-dir "setuptools==80.9.0" wheel && \
+    python -m pip install --no-cache-dir --no-build-isolation "cigar==0.1.3" && \
+    python -m pip install --no-cache-dir \
         cuteSV==2.1.4 \
         scipy \
         pysam \
         biopython \
-        cigar \
         numpy \
         pyvcf3 \
         scikit-learn
