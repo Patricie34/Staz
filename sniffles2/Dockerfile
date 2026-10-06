@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install Sniffles2 and updated Python dependencies
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install sniffles==2.6.2 \
+    && pip install sniffles==2.8.1 \
                  pysam==0.23.3 \
                  edlib>=1.3.9 \
                  psutil>=5.9.4
